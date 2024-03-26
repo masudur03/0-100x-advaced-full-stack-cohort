@@ -11,17 +11,47 @@ const app = express();
 // You have been given a numberOfRequestsForUser object to start off with which
 // clears every one second
 
-let numberOfRequestsForUser = {};
+
+let numberOfRequestsForUser = {
+
+};
+
+
 setInterval(() => {
-    numberOfRequestsForUser = {};
+  numberOfRequestsForUser = {};
 }, 1000)
 
-app.get('/user', function(req, res) {
+function countRequests(req, res, next) {
+  //everytime a request comes
+  //get user id
+  const id = req.header("user-id");
+
+  //if new id, add it to the object and set to 0
+  if (!(numberOfRequestsForUser[id])) {
+    numberOfRequestsForUser[id] = 0;
+  }
+
+  //increment the request for that user by 1
+  numberOfRequestsForUser[id]++;
+
+  //if its more than five, send 404
+  if (numberOfRequestsForUser[id] > 5) {
+    res.status(404).json({ msg: "too many requests" });
+  }
+
+  next();
+}
+
+//mount the middleware function
+app.use(countRequests);
+
+app.get('/user', function (req, res) {
   res.status(200).json({ name: 'john' });
 });
 
-app.post('/user', function(req, res) {
+app.post('/user', function (req, res) {
   res.status(200).json({ msg: 'created dummy user' });
 });
 
+app.listen(3000);
 module.exports = app;
