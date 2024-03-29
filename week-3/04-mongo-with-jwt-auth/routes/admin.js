@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const adminMiddleware = require("../middleware/admin");
 const router = Router();
-const { Admin, User, Course } = require("../db");
+const { Admin, Course } = require("../db");
 const { JWT_SECRET } = require("../config");
 const jwt = require("jsonwebtoken");
 
@@ -25,7 +25,7 @@ router.post('/signin', async (req, res) => {
     // Implement admin signup logic
     const username = req.body.username;
     const password = req.body.password;
-    const user = await User.find({
+    const user = await Admin.findOne({
         username,
         password
     })
