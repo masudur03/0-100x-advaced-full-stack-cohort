@@ -43,7 +43,7 @@ router.post('/signin', async (req, res) => {
     })
 
     if (user) {
-        const token = jwt.sing({ username }, JWT_SECRET);
+        const token = jwt.sign({ username }, JWT_SECRET);
         res.json({
             jwt_token: token,
         })
@@ -58,7 +58,7 @@ router.post('/signin', async (req, res) => {
 
 router.post('/courses/:courseId', userMiddleware, async (req, res) => {
     // Implement course purchase logic
-    const courseId = req.params.courseID;
+    const courseId = req.params.courseId;
     const username = req.username;
 
     try {
@@ -66,7 +66,7 @@ router.post('/courses/:courseId', userMiddleware, async (req, res) => {
         await User.updateOne({
             username
         }, {
-            "$push": courseId,
+            "$push": { purchasedCourses: courseId }
         });
 
         res.json({
@@ -87,9 +87,10 @@ router.get('/purchasedCourses', userMiddleware, async (req, res) => {
     const user = await User.findOne({
         username,
     });
-    const purchased_courses = user.purchasedCourses;
+    //const purchased_courses = user.purchasedCourses;
+    //const response = Course.find({ purchased_courses })
     res.json({
-        purchased_courses,
+        //response,
     })
 });
 
