@@ -3,10 +3,13 @@
 const express = require('express')
 const { updateSchema, createSchema } = require('./types');
 const { todo } = require('./db');
+const cors = require("cors")
 
 const app = express()
 const port = 3000
 
+//any frontend can hit this backend
+app.use(cors());
 //require incoming reqs into json
 app.use(express.json());
 
