@@ -10,7 +10,7 @@ const mongoose = require('mongoose');
 
 
 try {
-    mongoose.connect("mongodb+srv://rmasudur815:vvHioQgtqMAhV9Ug@cluster0.vko7lpx.mongodb.net/")
+    mongoose.connect("mongodb+srv://rmasudur815:vvHioQgtqMAhV9Ug@cluster0.vko7lpx.mongodb.net/tododb")
 } catch (e) {
     console.log("mongodb conenction error")
 }

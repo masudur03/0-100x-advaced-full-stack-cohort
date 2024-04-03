@@ -27,7 +27,8 @@ app.post("/todo", async function (req, res) {
     //put the todo in mongodb
     await todo.create({
         title: createPayload.title,
-        description: createPayload.description
+        description: createPayload.description,
+        completed: false
     })
 
     res.json({
@@ -47,7 +48,7 @@ app.get("/todo", async function (req, res) {
 })
 
 
-app.put("/completed", function (req, res) {
+app.put("/completed", async function (req, res) {
     const updatePayload = req.body;
     const parsedPayload = updateSchema.safeParse(updatePayload);
     if (!parsedPayload.success) {
@@ -55,6 +56,15 @@ app.put("/completed", function (req, res) {
             message: "you send the wrong inputs"
         })
     }
+    await todo.updateOne({
+        _id: req.body.id
+    }, {
+        completed: true
+    })
+
+    res.json({
+        message: "todo marked as completed"
+    })
 })
 
 // app.get('/', (req, res) => {
